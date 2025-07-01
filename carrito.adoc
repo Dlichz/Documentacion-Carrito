@@ -1,0 +1,271 @@
+= Consumo de servicios del módulo de Carrito
+Gibran Galicia Gómez, Francisco David Zárate Vásquez
+v1.0, 2025-04-06
+:description: Este documento se creó con la finalidad de mappear el consumo de los servicios en el flujo de Checkout (Resumen de carrito) y Checkout express así como reglas de negocio para cada sección de la vista \ \
+Open Source.
+:organization: Shopinbaz
+:doctype: book
+:preface-title: Preface
+// Settings:
+:experimental:
+:reproducible:
+:icons: font
+:listing-caption: Listing
+:sectnums:
+:toc:
+:toclevels: 3
+:xrefstyle: short
+ifdef::backend-pdf[]
+:pdf-theme: chronicles
+:pdf-themesdir: {docdir}
+:title-logo-image: image:sample-banner.svg[pdfwidth=4.25in,align=center]
+:source-highlighter: rouge
+//:rouge-style: github
+endif::[]
+
+== Carrito
+
+== Validaciones previas 
+Para llegar al carrito debemos tener un id elektra.
+
+=== Código postal predeterminado
+Para poder obtener la información de los productos es necesario hacer una consulta con un código postal. El código postal se obtiene de la dirección predeterminada del usuario. en caso de que ele usuario no haya registrado direcciones antes, se ocupa el predefinido 04530.
+
+=== ¿Cómo obtener el id Elektra?
+
+El *id Elektra* está ligado al correo asociado a tu perfil. Cuando cambias de correo necesitas verificarlo para obtener uno nuevo.
+
+La forma de llamar al flujo de validación del correo es por medio de un _start flow_ a través del GSSA/GSBD Interceptor. 
+
+
+[cols="1,3", options = "header"]
+|===
+|Llave  | *GSIFPrf*
+|Parámetros | subFlujo: mailVerificationFlow
+|===
+
+Ejemplo de llamado:
+
+[source, texPlain]
+----
+GSINAdminNavigator.shared.startFlow(forAction: "GSIFPrf", navigateDelegate: self, withInfo: ["subFlujo": "mailVerificationFlow"])
+----
+
+.Confirmar tu correo
+image::confirmarCorreo.jpg[SkeletonDireccionEntrega,pdfwidth=50%,link={url-Direccion_Entrega},float=center,role=thumb]
+
+Una vez que se confirmó el correo se obtiene un *id Elektra*, sin embargo, a este le pueden hacer falta datos.
+
+=== Tipos de ID Carrito
+==== Persistente
+
+- Se mantiene vivo durante todo el flujo de compra. Se guarda en GSPR/GSCH Commons.
+- Existe hasta que se finaliza la compra, sea exitosa o no.
+- Se elimina una vez que el flujo termina.
+- De este id se obtiene el total de productos que se muestra en el widget del carrito de la app. 
+
+==== Temporal
+
+- Se utiliza únicamente en el flujo de compra rápida.
+- No se guarda de manera persistente.
+
+== ¿Cómo obtener el idCarrito?
+El id carrito es un identificador en el que se liga toda la información de los productos. El PDP es el encargado de crear el idCarrito, por medio del boton *Comprar ahora* y *Agregar al carrito*. El equipo de navegación realiza un consumo al siguiente servicio:
+
+.POST ShoppingCart
+
+[source, https]
+----
+https://apigateway.superappbaz.com/integracion/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos
+----
+
+Para el request necesitamos el idCliente, tambien conocido como _idElektra_. Para el "idTipoCarrito" siempre se manda "2".
+
+.Request: 
+[,json]
+----
+{
+   "transaccion":{
+      "idCarrito":"",
+      "idCliente":"06T1jZJnHGyRDf8KCnQAS+B7uTehWMhuGqS6oteuK2w",
+      "idTipoCarrito":2,
+      "productos":[
+         {
+            "cantidad":1,
+            "proveedor":"1",
+            "sku":8003913
+         }
+      ]
+   }
+}
+----
+
+Si el consumo fue exitoso, el servicio nos devuelve un idCarrito que es una cadena alfanumerica al cual se liga toda la información de los productos, así como información necesaria para la compra. 
+
+.Response: 
+[,json]
+----
+{
+   "codigo":"200.Superapp-Compras-Comercios-Elektra-Digital-Catalogos.0000",
+   "mensaje":"Operación Exitosa.",
+   "folio":"6862c38e608d950f89cf0466be363d95-89cf0466be363d95",
+   "resultado":{
+      "idCarrito":"ab155c54b21d4d9ea3a33cccc3a64a2f",
+      "totalProductos":1,
+      "productos":[
+         {
+            "sku":"8003913",
+            "idCategoria":"1371679",
+            "idMarca":17,
+            "facturable":false,
+            "nombre":"Lavadora Automática Whirlpool 8MWTW2224MPM 22Kg Blanca",
+            "referencia":0,
+            "variante":"Lavadora Automática Whirlpool 8MWTW2224MPM 22Kg Blanca",
+            "marca":"WHIRLPOOL",
+            "cantidad":1,
+            "numeroProductosExistentes":null,
+            "precio":"9,999",
+            "precioLista":"16,499",
+            "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/12844726-80-80/8003913.jpg?v=638820564126330000",
+            "proveedor":"Elektra",
+            "idProveedor":"1",
+            "caracteristicasGenerales":null
+         }
+      ],
+      "informacionAdicional":[
+         {
+            "tipo":"noAddressInShoppingCart",
+            "mensaje":"El carrito no tiene dirección de entrega",
+            "estatus":"warning",
+            "producto":{
+               "sku":"",
+               "referencia":"9999"
+            }
+         },
+         {
+            "tipo":"noClientProfileDataInShoppingCart",
+            "mensaje":"El carrito no tiene datos de cliente",
+            "estatus":"warning",
+            "producto":{
+               "sku":"",
+               "referencia":"9998"
+            }
+         }
+      ]
+   },
+   "advertencias":false
+}
+----
+
+== Consumo de servicios del módulo de Carrito.
+
+=== Validaciones del módulo.
+
+Si ya existe el idElektra, del que hablamos antes, al entrar al módulo de carrito se valida que exista un _idCarrito_, sino existe se presenta el _empty state_ del carrito.
+
+Sí el carrito es apto para envío a domicilio, es decir, todos los productos en el nodo de envíos disponibles tienen un idModeloLogistico igual a 1. En caso contrario de que alguna de estas condiciones no se cumplan, mostramos el _empty state_.
+
+Posibles valores para idModeloLogistico:
+
+- No se tiene seleccionada una dirección: 0
+- Envío a domicilio: 1
+- Recoger en tienda: 2
+- Click & Collect: 3
+- Envío digital (Gift Card): 4
+- Producto Pendiente de Entrega (PPE): 5
+
+
+.Empty state del carrito
+image::emptyState.jpg[SkeletonDireccionEntrega,pdfwidth=50%,link={url-Direccion_Entrega},float=center,role=thumb]
+
+En caso de que no todos los productos del carrito tenga entrega a domicilio, se muestra el siguiente escenario.
+
+.Empty state del carrito
+image::emptyState.jpg[SkeletonDireccionEntrega,pdfwidth=50%,link={url-Direccion_Entrega},float=center,role=thumb]
+
+=== Get Carrito
+Para obtener la información de los productos hacemos un consumo *GET* al siguiente servicio donde añadimos los siguientes parametros:
+
+- ID Carrito
+- Código postal predeterminado
+- ID modelo logistico (1 por default)
+- Consulta puntos en false  
+
+[source, https]
+----
+https://apigateway.superappbaz.com/integracion/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos
+----
+
+=== ID Signify
+
+El id Signify se genera desde el pdp. Se guarda en una variable en el sessionInfo, tiene una vigencia de 24 horas y se elimina una vez que se haya finalizado la compra. [añadir nuevas reglas de idSignifyd, verificar con navegación y con Arquitectura.]
+
+== Consumo de verificaciones
+
+Después de hacer el consumo al GET de carrito, se hace un consumo a verificaciones para notificar la dirección. Mientras se hace eso se muestra un loader en la sección de dirección.
+
+.Loader de direcciones para carrito
+image::loaderDirecciones.png[SkeletonDireccionEntrega,pdfwidth=50%,link={url-Direccion_Entrega},float=center,role=thumb]
+
+Para notificar la dirección predeterminada del usuario se obtiene de la variable que nos expuso el sessionInfo. 
+
+[source, textplain]
+----
+GSSessionInfo.direccion
+----
+
+Se hace el consumo POST al siguiente servicio.
+
+[https, source]
+----
+"/superapp/compras/comercios/elektra-digital/gestion-pedidos/v1/pedidos/verificaciones"
+----
+
+Para el request se envía el IDCarrito, el código postal predeterminado, que se obtiene de la dirección que nos devolvió el session info. Y en el nodo de logistica entregas se manda la dirección completa de manera cifrada.
+En esta petición se notifica en los headers el _id Signifyd_ como x-id-transaccion-venta. 
+
+.REQUEST
+[json]
+----
+{
+   "transaccion":{
+      "idCarrito":"d5d0df68fcc8474aa04dd97991f33200",
+      "codigoPostal":"04700",
+      "logisticaEntregas":[
+         {
+            "direccion":{
+               "colindancia":{
+                  "calleIzquierda":"8VP88MAIE12Zf9foHfIRmg",
+                  "calleDerecha":"HqntUNAg9mtEPe76fYLIcA"
+               },
+               "alias":"iul7LDy/mAwQF3DHtImA7Q",
+               "colonia":"z92CxtUiRwDMY1jECpD5XIQ6Epb3xOSqQ/jLnNhLNLk",
+               "detalles":{
+                  "receptor":{
+                     "nombreCompleto":"lpIzrqPTuwi4RwR0QY7yg6v78YF3ueU3x3SBcdFt4GY",
+                     "indicaciones":"2m1xlrFh2mm3S41uYZ8QHA",
+                     "receptorDiferente":true,
+                     "numeroCelular":"EHhDFpph/yDl6dWjY2rPWg"
+                  }
+               },
+               "entidadFederativa":"rChXN/WQjRvune6StQFV4upcSaQ9vZWHu6eQPi/KM8g",
+               "municipio":"G/kRC4Wr0Md978QOlc2HQA",
+               "numeroInterior":"XbV7s/XHP253Hpbcmlhnow",
+               "numeroExterior":"G653d8aFaWFAlovJhkJjaA",
+               "calle":"U3XdL2yJPihhvFbdLXN3AA",
+               "codigoPostal":"HTyFM/XVkvyUDsYuIdkB1A"
+            },
+            "id":"delivery",
+            "idModelo":1,
+            "nombre":"Envío domicilio"
+         }
+      ]
+   }
+}
+----
+
+.RESPONSE
+[json]
+----
+"/superapp/compras/comercios/elektra-digital/gestion-pedidos/v1/pedidos/verificaciones"
+----
