@@ -196,6 +196,86 @@ Para obtener la información de los productos hacemos un consumo *GET* al siguie
 https://apigateway.superappbaz.com/integracion/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos
 ----
 
+== Mapear respuesta de GET CARRITO
+Cuando el servicio GET CARRITO responde se muestra lo siguiente en pantalla:
+
+=== Productos:
+Del response de del servicio mencionado se obtiene el arreglo de productos, y por cada ítem de este arreglo se pinta una card de producto en un contenedor de lista,
+Cada producto cuenta con una imagen del producto, un nombre, precio final, precio original, cantidad seleccionada, stock, nombre del vendedor,  precio de envío (en caso de estar seleccionado el tap de “Envío a domicilio), promesa de entrega, ademas de las promociones de ese producto si se decide comprarlo con la opción de “Préstamo”.
+
+.Card de producto
+image::cardProducto.png[width=50%]
+
+==== Datos principales de productos
+Los datos como imagen, nombre, precio final (precio en el json), precio original (precioLista en el json), cantidad, stock y nombre vendedor se obtienen del arreglo de productos en en response de GET CARRITO antes mencionado.Si el precio final es menor del precio original se muestra una etiqueta de “oferta” en la parte superior izquierda de la card de producto correspondiente.
+
+[NOTE]
+Dentro de este arreglo de producto en cada ítem viene un campo llamado referencia, que es el identificador del producto dentro del carrito. Este dato es importante porque se usa para lanzar los servicios para borrar el producto o actualizar su cantidad dentro del carrito.
+
+==== Logística de entrega del producto
+Para pintar la promesa de entrega del producto (únicamente a domicilio) se obtendrá del campo “fechaEntregaEstimada”  en los ítems del arreglo “logisticaEntregas” del response del GET CARRITO, estos ítems son  identificables por su “sku” con los ítems del arreglo de producto.
+
+En caso de que el usuario tenga elegida la opción de recoger en tienda se debe pintar el texto “Recoge a partir de hoy” si su “idModeloLogistico” es “2”, si es “3”
+
+Para pintar el precio de envío a domicilio se debe tomar igual del arreglo de”logisticaEntregas”, pero en este caso del arreglo de "enviosDisponibles", dentro de este  se busca el ítem que tenga el campo “idModeloLogistico” con el valor de “1” y se toma el campo “precio” para pintar como precio de envío. Si el precio es cero se pinta la leyenda “Envío gratis”.
+Si el usuario tiene seleccionada la opción de recoger en tienda no se pinta el precio de envío.
+
+==== Promociones en productos
+Se obtionen de cada item de producto del response de GET CARRITO dentro del campo de “caracteristicasGenerales”.
+
+.Nodo para promociones
+image::nodoPromociones.png[width=50%]
+
+Estas se pintan en forma de chips bajo la seccion de logistica de entrega de la card de producto.
+
+Bono de regalo se pinta solo si su porpiedad "valor" es true.
+
+Descuento adicional se pinta si existe un nodo en el cual el valor de su propiedad "nombre" empieza con "descuento" y se toma como el porsentaje del decuento la propiedad "valor". En la imagen anterior se ve un ejemplo de un descuento del 10%.
+
+==== Alertas en productos
+
+=== Montos
+
+== Eventos de cards de productos
+Cada card de producto tiene los evento de actualizar la cantidad del producto y borrarlo lamnzando sus servicios correspondientes que se detallaran más adelante.
+
+Estos 2 ultimos servicios retornan el mismo responsable que GET CARRITO así que siguen el mismo proceso para pintar datos en pantalla.
+
+=== Actualizar cantidad
+Se realiza con el servicio PUT CANTIDADES de carrito 
+"/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos/cantidades" 
+
+Mandando en su request: el id del carrito, la referencia del producto, la nueva cantidad del producto y el codigo postal de la direccion actual del carrito.
+```json
+{
+   "transaccion":{
+      "puntosConsulta":false,
+      "cantidad”:[NUEVA_CANTIDAD],
+      ”codigoPostal”:”[CODIGO_POSTAL]”,
+      ”idCarrito”:”[ID_CARRITO],
+      ”idReferenciaProducto”:[REFERENCIA_PRODUCTO],
+      ”idTipoCarrito":2
+   }
+}
+```
+
+=== Borrar producto
+Se lanza el servicio DELETE 
+“/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos”
+
+Mandando en request: el id del carrito, la referencia del producto y el codigo postal de la direccion actual del carrito.
+```json
+{
+   "transaccion":{
+      "puntosConsulta":false,
+      "codigoPostal”:[CONDIGO_POSTAL],
+      ”idCarrito”:[ID_CARRITO],
+      ”idReferenciaProducto”:[REFERENCIA_PRODUCTO],
+      ”idTipoCarrito":2
+   }
+}
+```
+
 === ID Signify
 
 El id Signify se genera desde el pdp. Se guarda en una variable en el sessionInfo, tiene una vigencia de 24 horas y se elimina una vez que se haya finalizado la compra. [añadir nuevas reglas de idSignifyd, verificar con navegación y con Arquitectura.]
