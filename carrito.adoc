@@ -276,6 +276,203 @@ Mandando en request: el id del carrito, la referencia del producto y el codigo p
 }
 ```
 
+=== Direcciones
+
+== Envio a domicilio
+
+Al no contar con una direccion se muestra el una modal en donde tendra la opcion para agregar una opcion mediante un boton.
+
+al darle click en "Agregar direccion" se abrira una nueva vista con el formulario de direccion donde el usuario tendra que llenar los datos solicitado ref4entes a la direccion, al finalizar esa direecion se mostrara en el modal de direcciones guardadas
+
+en caso de quel usuario si cuente con una o mas direcciones, se mostrara dicho listado en el modal de direcciones guardadas en donde el ususario podra elegir la direccion a la cual recibira sus productos y confirmarla con el boton de guardar
+
+[NOTE] 
+Pendiente de como se ejecuta el servicio deonde se obtienen las direcciones
+
+== Recoger en tienda
+
+cuando esta seleccionado recoger el tienda el usuario debera elegir la tienda donde recoger sus productos haciendo click en el boton de encontrar tienda, esto mostrara en el modal de listado de sucursales el cual se alimenta de el consumo del servico: superapp/compras/comercios/elektra-digital/catalogos/v2/sucursales/busquedas
+
+REQUEST:
+```json
+{
+   "transaccion":{
+      "sucursal":{
+         "codigoPostal":"63000"
+      },
+      "idCarrito":"8e3024fa5690458d9b69977da744450e",
+      "geolocalizacionDispositivo":{
+         "latitud":"",
+         "longitud":""
+      },
+      "totalRegistrosPorPagina":10,
+      "pagina":1
+   }
+}
+```
+RESPONSE:
+```json
+
+{
+   "codigo":"200.Superapp-Compras-Comercios-Elektra-Digital-Catalogos.0000",
+   "mensaje":"Operación Exitosa.",
+   "folio":"68670d93064f59daf70db41dc6035841-f70db41dc6035841",
+   "resultado":{
+      "sucursales":[
+         {
+            "id":"9650",
+            "idTipoRecoleccion":3,
+            "fechaRecoleccion":"Recoge en 1 hora",
+            "numeroCelular":"3112390926",
+            "distancia":"0",
+            "direccion":{
+               "calle":"Lerdo",
+               "numeroExterior":"SN",
+               "numeroInterior":"SN",
+               "colonia":"Tepic",
+               "municipio":"Tepic",
+               "codigoPostal":"63000",
+               "entidadFederativa":"Nayarit",
+               "alias":"EKT TEPIC HIDALGO",
+               "colindancia":{
+                  "calleDerecha":"",
+                  "calleIzquierda":""
+               },
+               "geolocalizacion":{
+                  "latitud":21.512261,
+                  "longitud":-104.893598
+               }
+            },
+            "productosInventario":[
+               {
+                  "sku":"31062057",
+                  "skuSucursal":"0",
+                  "existencia":1,
+                  "disponibilidad":true,
+                  "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/14081622-80-80/31062057.jpg?v=638863939960730000"
+               }
+            ]
+         },
+         {
+            "id":"2967",
+            "idTipoRecoleccion":3,
+            "fechaRecoleccion":"Recoge en 1 hora",
+            "numeroCelular":"3118778936",
+            "distancia":"0",
+            "direccion":{
+               "calle":"Hidalgo pte",
+               "numeroExterior":"SN",
+               "numeroInterior":"SN",
+               "colonia":"Tepic",
+               "municipio":"Tepic",
+               "codigoPostal":"63000",
+               "entidadFederativa":"Nayarit",
+               "alias":"SYR TEPIC",
+               "colindancia":{
+                  "calleDerecha":"",
+                  "calleIzquierda":""
+               },
+               "geolocalizacion":{
+                  "latitud":21.511002,
+                  "longitud":-104.892725
+               }
+            },
+            "productosInventario":[
+               {
+                  "sku":"31062057",
+                  "skuSucursal":"0",
+                  "existencia":1,
+                  "disponibilidad":true,
+                  "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/14081622-80-80/31062057.jpg?v=638863939960730000"
+               }
+            ]
+         },
+         {
+            "id":"6101",
+            "idTipoRecoleccion":3,
+            "fechaRecoleccion":"Recoge en 1 hora",
+            "numeroCelular":"3112813545",
+            "distancia":"0",
+            "direccion":{
+               "calle":"Amado Nervo",
+               "numeroExterior":"SN",
+               "numeroInterior":"SN",
+               "colonia":"Tepic",
+               "municipio":"Tepic",
+               "codigoPostal":"63000",
+               "entidadFederativa":"Nayarit",
+               "alias":"EKT TEPIC 1 AMADO NERVO",
+               "colindancia":{
+                  "calleDerecha":"",
+                  "calleIzquierda":""
+               },
+               "geolocalizacion":{
+                  "latitud":21.512517,
+                  "longitud":-104.891903
+               }
+            },
+            "productosInventario":[
+               {
+                  "sku":"31062057",
+                  "skuSucursal":"0",
+                  "existencia":1,
+                  "disponibilidad":true,
+                  "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/14081622-80-80/31062057.jpg?v=638863939960730000"
+               }
+            ]
+         },
+         {
+            "id":"9316",
+            "idTipoRecoleccion":3,
+            "fechaRecoleccion":"Recoge en 1 hora",
+            "numeroCelular":"0",
+            "distancia":"0",
+            "direccion":{
+               "calle":"Av Aguamilpa",
+               "numeroExterior":"SN",
+               "numeroInterior":"SN",
+               "colonia":"Tepic",
+               "municipio":"Tepic",
+               "codigoPostal":"63173",
+               "entidadFederativa":"Nayarit",
+               "alias":"BAZ Plaza la Cantera",
+               "colindancia":{
+                  "calleDerecha":"",
+                  "calleIzquierda":""
+               },
+               "geolocalizacion":{
+                  "latitud":21.488738,
+                  "longitud":-104.831954
+               }
+            },
+            "productosInventario":[
+               {
+                  "sku":"31062057",
+                  "skuSucursal":"0",
+                  "existencia":1,
+                  "disponibilidad":true,
+                  "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/14081622-80-80/31062057.jpg?v=638863939960730000"
+               }
+            ]
+         }
+      ],
+      "paginacion":{
+         "pagina":1,
+         "totalRegistrosPorPagina":10,
+         "totalRegistros":4,
+         "totalPaginas":1
+      }
+   },
+   "advertencias":false
+}
+```
+al selecionar alguna direccion se habilita el boton para continuar yb una vez que se agrega una dirreccion de domicilio o una sucursal se lanza verificaiones con esa nueva direccion si dio 200 se consula de nuevo el carrito si no sale una alerta "Hubo un error al cambiar la direccion"
+
+
+
+
+
+
 === ID Signify
 
 El id Signify se genera desde el pdp. Se guarda en una variable en el sessionInfo, tiene una vigencia de 24 horas y se elimina una vez que se haya finalizado la compra. [añadir nuevas reglas de idSignifyd, verificar con navegación y con Arquitectura.]
