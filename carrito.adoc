@@ -193,8 +193,174 @@ Para obtener la información de los productos hacemos un consumo *GET* al siguie
 
 [source, https]
 ----
-https://apigateway.superappbaz.com/integracion/superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos
+superapp/compras/comercios/elektra-digital/carrito-compras/v1/productos?idCarrito=8e3024fa5690458d9b69977da744450e&codigoPostal=04530&puntosConsulta=false&idModeloLogistico=1
 ----
+
+RESPONDE
+
+```json
+            {
+   "codigo":"200.Superapp-Compras-Comercios-Elektra-Digital-Catalogos.0000",
+   "mensaje":"Operación Exitosa.",
+   "folio":"686714ebb269d6525a0286c15d43c973-5a0286c15d43c973",
+   "resultado":{
+      "idCarrito":"8e3024fa5690458d9b69977da744450e",
+      "totalProductos":1,
+      "productos":[
+         {
+            "sku":"31062057",
+            "idCategoria":"1371655",
+            "categoria":"/Telefonía/Celulares/Smartphones/",
+            "idMarca":301939,
+            "facturable":false,
+            "nombre":"Xiaomi Redmi Note 14 Pro 256GB Libre Azul Océano",
+            "referencia":0,
+            "variante":"Xiaomi Redmi Note 14 Pro 256GB Libre Azul Océano",
+            "marca":"XIAOMI",
+            "cantidad":1,
+            "numeroProductosExistentes":99999,
+            "precio":"zUQ64P+pQ3GBHdBLVUto/Q==",
+            "precioLista":"/tzh3P4msjhOQpMEPbYFkg==",
+            "urlImagen":"https://elektra.vteximg.com.br/arquivos/ids/14081622-80-80/31062057.jpg?v=638863939960730000",
+            "proveedor":"Elektra",
+            "idProveedor":"1",
+            "caracteristicasGenerales":[
+               
+            ]
+         }
+      ],
+      "formaPago":{
+         
+      },
+      "logisticaEntregas":[
+         {
+            "sku":"31062057",
+            "idModelo":1,
+            "referencia":0,
+            "proveedor":"1",
+            "nombre":"residential",
+            "fechaEntregaEstimada":"Recibe en C.P. 04530 entre 7 de jul a  14 de jul ",
+            "cantidad":1,
+            "direccion":{
+               "id":"kT0uM/zKDKP3WPuyyOY23HxTWGcXzxNAstmGJc8p5o7QxlqM+4IXnATS46hrBwPE",
+               "calle":"ou+ZblklaPrWfiMrBnWyQg==",
+               "numeroExterior":"ZmISx4BMKZDYODE25i9O5A==",
+               "numeroInterior":"lgCIY/LyGjAQ3NwA48wKAA==",
+               "colonia":"v8HY34gDa/GUo3I7giuDMg==",
+               "municipio":"0Q/pbkIhNWzXAQ81V/cHrg==",
+               "alias":"rtVf/BxAsfh6wBDbkFYHCA==",
+               "codigoPostal":"TWOgaX3VK/0MTVjZO5ggLQ==",
+               "receptor":{
+                  "nombreCompleto":"Z9+jrxvgSR16VRSkDA7AVdRl9gqMQEN9uc6/IomE/5Y=",
+                  "celular":null
+               }
+            },
+            "enviosDisponibles":[
+               {
+                  "idModeloLogistico":1,
+                  "id":"delivery",
+                  "nombre":"Envío domicilio",
+                  "precio":"29gOwqyo+y9PlcSSTvgTnw==",
+                  "precioLista":"29gOwqyo+y9PlcSSTvgTnw==",
+                  "paqueterias":[
+                     {
+                        "id":"ektnvia",
+                        "nombre":"ektnvia",
+                        "cantidad":1
+                     }
+                  ]
+               },
+               {
+                  "idModeloLogistico":2,
+                  "id":"delivery",
+                  "nombre":"Recoger en Tienda",
+                  "precio":"29gOwqyo+y9PlcSSTvgTnw==",
+                  "precioLista":"29gOwqyo+y9PlcSSTvgTnw==",
+                  "paqueterias":[
+                     {
+                        "id":"103ff16",
+                        "nombre":"Recoger en Tienda",
+                        "cantidad":1
+                     }
+                  ]
+               }
+            ]
+         }
+      ],
+      "avisos":[
+         {
+            "tipo":"noClientProfileDataInShoppingCart",
+            "mensaje":"El carrito no tiene datos de cliente",
+            "estatus":"info",
+            "informacionFlujo":null,
+            "producto":{
+               "sku":"",
+               "referencia":"9998"
+            }
+         },
+         {
+            "tipo":"noPaymentDataInShoppingCart",
+            "mensaje":"El carrito no tiene forma de pago",
+            "estatus":"info",
+            "informacionFlujo":null,
+            "producto":{
+               "sku":"",
+               "referencia":"9997"
+            }
+         },
+         {
+            "tipo":"specialCategory",
+            "mensaje":"telefonia",
+            "estatus":"info",
+            "informacionFlujo":null,
+            "producto":{
+               "sku":"31062057",
+               "referencia":"0"
+            }
+         }
+      ],
+      "informacionAdicional":{
+         
+      },
+      "montosTotales":[
+         {
+            "id":"Items",
+            "nombre":"Subtotal",
+            "valor":"WU2HSCd69pFZYpCf7PcZwA=="
+         },
+         {
+            "id":"Envios",
+            "nombre":"Envío",
+            "valor":"29gOwqyo+y9PlcSSTvgTnw=="
+         },
+         {
+            "id":"Descuentos",
+            "nombre":"Descuentos",
+            "valor":"1bx1D9G4ts2cQ5yhgu1DUQ=="
+         },
+         {
+            "id":"Total",
+            "nombre":"Total",
+            "valor":"f06TqzY+KEqQ/q1cX/s7Nw=="
+         }
+      ],
+      "descuentos":[
+         
+      ],
+      "carritoPuntos":{
+         "idEstatus":0,
+         "puntosTotales":null,
+         "puntosCanje":null,
+         "puntosRestantes":null,
+         "puntosFaltantes":null,
+         "nivelUsuario":null,
+         "imagenNivel":null
+      }
+   },
+   "advertencias":false
+}
+
+```
 
 == Mapear respuesta de GET CARRITO
 Cuando el servicio GET CARRITO responde se muestra lo siguiente en pantalla:
@@ -235,6 +401,26 @@ Descuento adicional se pinta si existe un nodo en el cual el valor de su propied
 ==== Alertas en productos
 
 === Montos
+
+En el servicio GETCARRITO viene un arreglo de "montos totales" que son objetos con la propiedades id, nombre y valor necesarios para pintar la card de resumen de pagos.
+
+En la card se muestra:
+
+[cols="1,3", options = "header"]
+|===
+|Param  | *Properties*
+|Subtotal |  se concatena la cantidad de productos y la suma del costo
+|Envío | si el valor es cero, se muestra como gratis y tiene al gun valor se pinta el costo
+|Puntos | se pita en rojo y con valor negativo con el valor a descontaar
+|Total | se muestra el valor a pagar que viene en el mismo item
+|===
+
+
+[NOTE]
+todos los valores tienen formato de precio separado por miles y sin decimales.
+
+[NOTE] 
+JIMMY ESCRIBIR EL CASO DE PUNTOS
 
 == Eventos de cards de productos
 Cada card de producto tiene los evento de actualizar la cantidad del producto y borrarlo lamnzando sus servicios correspondientes que se detallaran más adelante.
@@ -467,10 +653,6 @@ RESPONSE:
 }
 ```
 al selecionar alguna direccion se habilita el boton para continuar yb una vez que se agrega una dirreccion de domicilio o una sucursal se lanza verificaiones con esa nueva direccion si dio 200 se consula de nuevo el carrito si no sale una alerta "Hubo un error al cambiar la direccion"
-
-
-
-
 
 
 === ID Signify
