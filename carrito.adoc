@@ -466,18 +466,18 @@ Mandando en request: el id del carrito, la referencia del producto y el codigo p
 
 == Envio a domicilio
 
-Al no contar con una direccion se muestra el una modal en donde tendra la opcion para agregar una opcion mediante un boton.
+Si el usuario no cuenta con una dirección, se mostrará un modal con la opción de agregar una mediante un botón.
 
-al darle click en "Agregar direccion" se abrira una nueva vista con el formulario de direccion donde el usuario tendra que llenar los datos solicitado ref4entes a la direccion, al finalizar esa direecion se mostrara en el modal de direcciones guardadas
+Al hacer clic en "Agregar dirección", se abrirá una nueva vista con un formulario donde el usuario deberá llenar los datos solicitados. Una vez completada, la dirección se mostrará en el modal de "Direcciones guardadas".
 
-en caso de quel usuario si cuente con una o mas direcciones, se mostrara dicho listado en el modal de direcciones guardadas en donde el ususario podra elegir la direccion a la cual recibira sus productos y confirmarla con el boton de guardar
+En caso de que el usuario ya tenga una o más direcciones registradas, se mostrará el listado en el modal de "Direcciones guardadas", donde podrá seleccionar la dirección de entrega y confirmarla con el botón "Guardar".
 
 [NOTE] 
 Pendiente de como se ejecuta el servicio deonde se obtienen las direcciones
 
 == Recoger en tienda
 
-cuando esta seleccionado recoger el tienda el usuario debera elegir la tienda donde recoger sus productos haciendo click en el boton de encontrar tienda, esto mostrara en el modal de listado de sucursales el cual se alimenta de el consumo del servico: superapp/compras/comercios/elektra-digital/catalogos/v2/sucursales/busquedas
+Cuando la opción "Recoger en tienda" está seleccionada, el usuario deberá elegir la sucursal donde recogerá sus productos haciendo clic en el botón "Encontrar tienda". Esto mostrará un modal con el listado de sucursales disponibles, el cual se alimenta mediante el consumo del siguiente servicio:
 
 REQUEST:
 ```json
